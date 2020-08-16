@@ -3,13 +3,14 @@ const express = require('express');
 const morgan = require('morgan');
 const colors = require('colors');
 const dotenv = require('dotenv');
-const { response } = require('express');
 // core modules
 const path = require('path');
 // custom modules
 const rootPath = require('./utils/rootPath');
 const connectDB = require('./config/connectDB');
 const usersRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
+const mongoErrorHandler = require('./middlewares/mongoErrorHandler');
 
 dotenv.config({
     path: path.join(rootPath, 'config', 'config.env'),
@@ -23,9 +24,12 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.get('/', (request, response) => response.send('App is rinnung'));
+app.use(express.json());
 
 app.use('/api/v1/users', usersRoutes);
+app.use('/api/v1/auth', authRoutes);
+
+app.use(mongoErrorHandler);
 
 const PORT = process.env.PORT || 5000;
 
