@@ -1,5 +1,6 @@
 // 3rd party modules
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const colors = require('colors');
 const dotenv = require('dotenv');
@@ -23,6 +24,8 @@ connectDB();
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+app.use(cookieParser());
 
 app.use(express.json());
 

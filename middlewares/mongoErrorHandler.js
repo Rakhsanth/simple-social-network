@@ -24,11 +24,19 @@ const mongoErrorHandler = (err, request, response, next) => {
         error = new ErrorResponse(message, 400);
     }
 
-    response.status(error.status || 500).json({
-        success: false,
-        data: JSON.parse(error.message),
-        error: true,
-    });
+    try {
+        response.status(error.status || 500).json({
+            success: false,
+            errors: JSON.parse(error.message),
+            error: true,
+        });
+    } catch (err) {
+        response.status(error.status || 500).json({
+            success: false,
+            data: error.message,
+            error: true,
+        });
+    }
 };
 
 module.exports = mongoErrorHandler;
