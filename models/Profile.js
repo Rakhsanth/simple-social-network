@@ -6,11 +6,6 @@ const ProfileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    handle: {
-        type: String,
-        required: true,
-        max: 40,
-    },
     company: {
         type: String,
     },
@@ -26,14 +21,14 @@ const ProfileSchema = new mongoose.Schema({
         required: true,
     },
     skills: {
-        // Comma seperated values and to be rendered logically with JS in react
+        // Comma seperated values and to be rendered logically with JS in react and also while inserting to DB
         type: [String],
         required: true,
     },
     bio: {
         type: String,
     },
-    githubusername: {
+    githubUserName: {
         type: String,
     },
     experience: [
