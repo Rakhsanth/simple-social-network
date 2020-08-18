@@ -9,6 +9,7 @@ const {
     getAllProfiles,
     getProfileByUserId,
     deleteUserAndProfile,
+    getGithubRepos,
 } = require('../controllers/profilesController');
 const Profile = require('../models/Profile');
 const advancedResults = require('../utils/advancedResults');
@@ -31,6 +32,8 @@ router
     .route('/users/:id')
     .get(getProfileByUserId)
     .delete(protectRoute, deleteUserAndProfile);
+
+router.route('/github/:username').get(getGithubRepos);
 
 // router.route('/')
 

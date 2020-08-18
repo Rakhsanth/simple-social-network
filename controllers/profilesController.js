@@ -2,6 +2,7 @@
 const express = require('express');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const axios = require('axios');
 // core modules
 const ErrorResponse = require('../utils/errorWrapper');
 // custom modules
@@ -177,6 +178,30 @@ const deleteUserAndProfile = asyncHandler(async (request, response, next) => {
         data: null,
     });
 });
+/*
+@ description : Get github repositories of a user
+@ route : DELETE api/v1/profiles/github/:username
+@ access : public
+*/
+const getGithubRepos = asyncHandler(async (request, response, next) => {
+    const { username } = request.params;
+    const config = {
+        method: 'get',
+        url: `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}`,
+        headers: { 'user-agent': 'node.js' },
+    };
+
+    const githubRepos = await axios(config);
+
+    console.log(githubRepos);
+
+    response.status(200).json({
+        success: true,
+        count: githubRepos.data.length,
+        data: githubRepos.data,
+        error: false,
+    });
+});
 
 module.exports = {
     getCurrentUserProfile,
@@ -185,4 +210,5 @@ module.exports = {
     getAllProfiles,
     getProfileByUserId,
     deleteUserAndProfile,
+    getGithubRepos,
 };
