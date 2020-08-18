@@ -9,7 +9,6 @@ const ErrorResponse = require('../utils/errorWrapper');
 const User = require('../models/User');
 const Profile = require('../models/Profile');
 const asyncHandler = require('../middlewares/asyncHandler');
-const { isValidPassword } = require('../utils/requestValidators');
 
 /*
 @ description : Get current logged in user details
@@ -187,8 +186,11 @@ const getGithubRepos = asyncHandler(async (request, response, next) => {
     const { username } = request.params;
     const config = {
         method: 'get',
-        url: `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}`,
-        headers: { 'user-agent': 'node.js' },
+        url: `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`,
+        headers: {
+            'user-agent': 'node.js',
+            Authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
+        },
     };
 
     const githubRepos = await axios(config);

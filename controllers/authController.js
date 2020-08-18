@@ -27,9 +27,8 @@ const registerUser = asyncHandler(async (request, response, next) => {
         errors.push({ password: 'password criteria not matched' });
     }
     if (errors.length !== 0) {
-        console.log(errors);
-        errors = JSON.stringify(errors);
-        return next(new ErrorResponse(errors.toString(), 401));
+        // console.log(errors);
+        return next(new ErrorResponse(JSON.stringify(errors), 401));
     }
     console.log(request.body);
 
@@ -66,9 +65,8 @@ const loginUser = asyncHandler(async (request, response, next) => {
         errors.push({ password: 'password criteria not matched' });
     }
     if (errors.length !== 0) {
-        console.log(errors);
-        errors = JSON.stringify(errors);
-        return next(new ErrorResponse(errors.toString(), 401));
+        // console.log(errors);
+        return next(new ErrorResponse(JSON.stringify(errors), 401));
     }
 
     const user = await User.findOne({ email }).select('+password');
