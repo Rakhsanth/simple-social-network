@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const colors = require('colors');
 const dotenv = require('dotenv');
+const cors = require('cors');
 // core modules
 const path = require('path');
 // custom modules
@@ -20,6 +21,8 @@ dotenv.config({
 });
 
 const app = express();
+
+app.use(cors());
 
 connectDB();
 
