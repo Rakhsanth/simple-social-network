@@ -6,8 +6,14 @@ const jwt = require('jsonwebtoken');
 const ErrorResponse = require('../utils/errorWrapper');
 const User = require('../models/User');
 
+/*
+desc : Check if the token is acuthenticated and set the current user
+route: any protected route with this midlleware plugged in
+access: private (user)
+*/
 const protectRoute = async (request, response, next) => {
     let token;
+    console.log(request.headers.authorization);
     if (
         request.headers.authorization &&
         request.headers.authorization.startsWith('Bearer')
@@ -16,6 +22,7 @@ const protectRoute = async (request, response, next) => {
     } else if (request.cookies.token) {
         token = request.cookies.token;
     }
+    console.log(token);
     if (!token) {
         return next(
             new ErrorResponse('not authorized to access this route', 404)

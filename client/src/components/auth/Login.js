@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 // import axios from 'axios';
 import * as Yup from 'yup';
+// action creators
+import { setAlert, login } from '../../actions';
 
 const initialValues = {
     email: '',
@@ -34,36 +37,19 @@ const validationSchema = Yup.object({
     ),
 });
 
-const onSubmit = async (values) => {
-    console.log(values);
-    // const { name, email, password } = values;
-    // let body = {
-    //     name,
-    //     email,
-    //     password,
-    // };
-    // body = JSON.stringify(body);
-    // const axiosConfig = {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    // };
-    // try {
-    //     const response = await axios.post(
-    //         `http://localhost:4010/api/v1/auth/register`,
-    //         body,
-    //         axiosConfig
-    //     );
-    //     console.log(response.data);
-    // } catch (err) {
-    //     console.log(err.response.data);
-    // }    To later replace the redux logics for the token storage etc.
-};
+function Login(props) {
+    const onSubmit = async (values, onSubmitProps) => {
+        const { email, password } = values;
+        console.log(values);
+        props.login(email, password);
+    };
 
-function Login() {
+    if (props.isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
+
     return (
-        <section className="container">
-            <div className="alert alert-danger">Invalid credentials</div>
+        <Fragment>
             <h1 className="large text-primary">Sign In</h1>
             <p className="lead">
                 <i className="fas fa-user"></i> Sign into Your Account
@@ -73,44 +59,66 @@ function Login() {
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             >
-                <Form className="form">
-                    <div className="form-group">
-                        <Field
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                        />
-                        <ErrorMessage name="email">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                    </div>
-                    <div className="form-group">
-                        <Field
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                        />
-                        <ErrorMessage name="password">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                    </div>
-                    <input
-                        type="submit"
-                        className="btn btn-primary"
-                        value="Login"
-                    />
-                </Form>
+                {(formik) => {
+                    console.log(formik);
+                    if (!formik.isValid && formik.isSubmitting) {
+                        console.log('I am getting validated');
+                        props.setAlert(
+                            'Please fill the form based on instructions',
+                            'danger'
+                        );
+                    }
+                    return (
+                        <Form className="form">
+                            <div className="form-group">
+                                <Field
+                                    type="email"
+                                    placeholder="Email Address"
+                                    name="email"
+                                />
+                                <ErrorMessage name="email">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                            </div>
+                            <div className="form-group">
+                                <Field
+                                    type="password"
+                                    placeholder="Password"
+                                    name="password"
+                                />
+                                <ErrorMessage name="password">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                            </div>
+                            <input
+                                type="submit"
+                                className="btn btn-primary"
+                                value="Login"
+                            />
+                        </Form>
+                    );
+                }}
             </Formik>
 
             <p className="my-1">
                 Don't have an account? <Link to="/register">Sign Up</Link>
             </p>
-        </section>
+        </Fragment>
     );
 }
 
-export default Login;
+const mapStateToProps = (store) => {
+    return {
+        isAuthenticated: store.auth.isAuthenticated,
+    };
+};
+
+export default connect(mapStateToProps, { setAlert, login })(Login);

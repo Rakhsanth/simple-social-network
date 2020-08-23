@@ -1,8 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { connect } from 'react-redux';
 // import axios from 'axios';
 import * as Yup from 'yup';
+
+// action creators
+import { setAlert, register } from '../../actions';
 
 const initialValues = {
     name: '',
@@ -44,35 +48,19 @@ const validationSchema = Yup.object({
         ),
 });
 
-const onSubmit = async (values) => {
-    console.log(values);
-    // const { name, email, password } = values;
-    // let body = {
-    //     name,
-    //     email,
-    //     password,
-    // };
-    // body = JSON.stringify(body);
-    // const axiosConfig = {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    // };
-    // try {
-    //     const response = await axios.post(
-    //         `http://localhost:4010/api/v1/auth/register`,
-    //         body,
-    //         axiosConfig
-    //     );
-    //     console.log(response.data);
-    // } catch (err) {
-    //     console.log(err.response.data);
-    // }    To later replace the redux logics for the token storage etc.
-};
+function Register(props) {
+    const onSubmit = async (values) => {
+        console.log(values);
+        const { name, email, password } = values;
+        props.register(name, email, password);
+    };
 
-function Register() {
+    if (props.isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
+
     return (
-        <section className="container">
+        <Fragment>
             <h1 className="large text-primary">Sign Up</h1>
             <p className="lead">
                 <i className="fas fa-user"></i> Create Your Account
@@ -82,67 +70,97 @@ function Register() {
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             >
-                <Form className="form">
-                    <div className="form-group">
-                        <Field type="text" placeholder="Name" name="name" />
-                        <ErrorMessage name="name">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                    </div>
-                    <div className="form-group">
-                        <Field
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                        />
-                        <ErrorMessage name="email">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                        <small className="form-text">
-                            This site uses Gravatar so if you want a profile
-                            image, use a Gravatar email
-                        </small>
-                    </div>
-                    <div className="form-group">
-                        <Field
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                        />
-                        <ErrorMessage name="password">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                    </div>
-                    <div className="form-group">
-                        <Field
-                            type="password"
-                            placeholder="Confirm Password"
-                            name="password2"
-                        />
-                        <ErrorMessage name="password2">
-                            {(errorMsg) => (
-                                <span className="errorMessage">{errorMsg}</span>
-                            )}
-                        </ErrorMessage>
-                    </div>
-                    <input
-                        type="submit"
-                        className="btn btn-primary"
-                        value="Register"
-                    />
-                </Form>
+                {(formik) => {
+                    console.log(formik);
+                    if (!formik.isValid && formik.isSubmitting) {
+                        console.log('I am getting validated');
+                        props.setAlert(
+                            'Please fill the form based on instructions',
+                            'danger'
+                        );
+                    }
+                    return (
+                        <Form className="form">
+                            <div className="form-group">
+                                <Field
+                                    type="text"
+                                    placeholder="Name"
+                                    name="name"
+                                />
+                                <ErrorMessage name="name">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                            </div>
+                            <div className="form-group">
+                                <Field
+                                    type="email"
+                                    placeholder="Email Address"
+                                    name="email"
+                                />
+                                <ErrorMessage name="email">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                                <small className="form-text">
+                                    This site uses Gravatar so if you want a
+                                    profile image, use a Gravatar email
+                                </small>
+                            </div>
+                            <div className="form-group">
+                                <Field
+                                    type="password"
+                                    placeholder="Password"
+                                    name="password"
+                                />
+                                <ErrorMessage name="password">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                            </div>
+                            <div className="form-group">
+                                <Field
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    name="password2"
+                                />
+                                <ErrorMessage name="password2">
+                                    {(errorMsg) => (
+                                        <span className="errorMessage">
+                                            {errorMsg}
+                                        </span>
+                                    )}
+                                </ErrorMessage>
+                            </div>
+                            <input
+                                type="submit"
+                                className="btn btn-primary"
+                                value="Register"
+                            />
+                        </Form>
+                    );
+                }}
             </Formik>
             <p className="my-1">
                 Already have an account? <Link to="/login">Sign In</Link>
             </p>
-        </section>
+        </Fragment>
     );
 }
 
-export default Register;
+const mapStateToProps = (store) => {
+    return {
+        isAuthenticated: store.auth.isAuthenticated,
+    };
+};
+
+export default connect(mapStateToProps, { setAlert, register })(Register);

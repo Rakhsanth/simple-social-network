@@ -89,14 +89,10 @@ const loginUser = asyncHandler(async (request, response, next) => {
 @ access : private (user)
 */
 const getCurrentUser = asyncHandler(async (request, response, next) => {
-    if (!request.user) {
-        return next(new ErrorResponse(`not authorized to use this route`, 404));
-    }
-
     const user = await User.findById(request.user.id);
 
     if (!user) {
-        return next(new ErrorResponse(`no such user exists`, 404));
+        return next(new ErrorResponse(`User not logged in`, 404));
     }
 
     response.status(200).json({

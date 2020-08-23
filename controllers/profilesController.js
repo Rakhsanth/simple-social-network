@@ -12,7 +12,7 @@ const asyncHandler = require('../middlewares/asyncHandler');
 
 /*
 @ description : Get current logged in user details
-@ route : GET api/v1/auth/me
+@ route : GET api/v1/profiles/me
 @ access : private (user)
 */
 const getCurrentUserProfile = asyncHandler(async (request, response, next) => {
@@ -20,6 +20,7 @@ const getCurrentUserProfile = asyncHandler(async (request, response, next) => {
     //     return next(new ErrorResponse(`not authorized to use this route`, 404));
     // }
     const user = request.user;
+    console.log(user);
     const profile = await Profile.findOne({ user: user.id }).populate({
         path: 'user',
         select: 'name',
@@ -97,6 +98,7 @@ const updateProfile = asyncHandler(async (request, response, next) => {
         errors = JSON.stringify(errors);
         return next(new ErrorResponse(errors.toString(), 401));
     }
+    request.body.skills = skills.split(',').map((skill) => skill.trim());
     let profile = await Profile.findOne({ user: request.user.id });
     if (!profile) {
         return next(
