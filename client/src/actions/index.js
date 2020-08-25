@@ -146,6 +146,67 @@ export const getCurrentProfile = () => {
         }
     };
 };
+// Get all profiles
+export const getProfiles = () => {
+    return async function (dispatch) {
+        dispatch({ type: 'CLEAR_PROFILE' });
+        try {
+            // const config = {
+            //     headers: {
+            //         Authorization: `Bearer ${token}`,
+            //     },
+            //     withCredentials: true,
+            // };
+            const response = await axios.get(
+                `http://localhost:4010/api/v1/profiles`
+                // config
+            );
+            dispatch({ type: 'GET_PROFILES', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
+        }
+    };
+};
+// Get profile by user ID
+export const getProfileByUserId = (userId) => {
+    return async function (dispatch) {
+        try {
+            // const config = {
+            //     headers: {
+            //         Authorization: `Bearer ${token}`,
+            //     },
+            //     withCredentials: true,
+            // };
+            const response = await axios.get(
+                `http://localhost:4010/api/v1/profiles/users/${userId}`
+                // config
+            );
+            dispatch({ type: 'GET_PROFILE', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
+        }
+    };
+};
+// Get Github Repositories
+export const getGithubRepos = (username) => {
+    return async function (dispatch) {
+        try {
+            // const config = {
+            //     headers: {
+            //         Authorization: `Bearer ${token}`,
+            //     },
+            //     withCredentials: true,
+            // };
+            const response = await axios.get(
+                `http://localhost:4010/api/v1/profiles/github/${username}`
+                // config
+            );
+            dispatch({ type: 'GET_REPOS', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
+        }
+    };
+};
 // Create New Profile or update profile details action
 export const createProfile = (
     formValues,
@@ -206,7 +267,7 @@ export const createProfile = (
             } else {
                 body = formValues;
                 if (edit) {
-                    body.overwrite = true;
+                    // body.overwrite = true;
                     response = await axios.put(
                         `http://localhost:4010/api/v1/profiles`,
                         body,
@@ -283,6 +344,32 @@ export const deleteExpOrEdu = (listToUpdate, expOrEdu, profile) => {
             console.log(err);
             console.log(err.response.data);
             dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
+        }
+    };
+};
+
+// Get all posts action
+export const getAllPosts = (pageNumber = 1) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            const response = await axios.get(
+                `http://localhost:4010/api/v1/posts?page=${pageNumber}`,
+                axiosConfig
+            );
+            dispatch({ type: 'GET_POSTS', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
         }
     };
 };

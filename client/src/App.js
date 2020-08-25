@@ -11,6 +11,10 @@ import ProtectedRoutes from './components/ProtectRoutes';
 import Dashboard from './components/Dashboard/DashBoard';
 import CreateProfile from './components/profileFoms/CreateProfile';
 import EditProfile from './components/profileFoms/EditProfile';
+import AddExperience from './components/profileFoms/AddExperience';
+import AddEducation from './components/profileFoms/AddEducation';
+import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
 // utils
 // Styles
 import './App.css';
@@ -19,8 +23,7 @@ import { loadUser } from './actions';
 // Redux related
 import { Provider } from 'react-redux';
 import store from './store';
-import AddExperience from './components/profileFoms/AddExperience';
-import AddEducation from './components/profileFoms/AddEducation';
+import Posts from './components/posts/Posts';
 
 function App() {
     useEffect(() => {
@@ -41,6 +44,16 @@ function App() {
                                 exact
                                 path="/register"
                                 component={Register}
+                            />
+                            <Route
+                                exact
+                                path="/profiles"
+                                component={Profiles}
+                            />
+                            <Route
+                                exact
+                                path="/profile/:id"
+                                component={Profile}
                             />
                             <ProtectedRoutes
                                 exact
@@ -66,6 +79,11 @@ function App() {
                                 exact
                                 path="/add-education"
                                 component={AddEducation}
+                            />
+                            <ProtectedRoutes
+                                exact
+                                path="/posts"
+                                component={Posts}
                             />
                         </Switch>
                     </section>

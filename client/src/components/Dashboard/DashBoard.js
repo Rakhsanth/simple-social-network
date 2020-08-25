@@ -13,7 +13,7 @@ function DashBoard(props) {
     } = props;
     useEffect(() => {
         props.getCurrentProfile();
-    }, []);
+    }, [props.getCurrentProfile]);
     return loading && profile === null ? (
         <Spinner size="lg" />
     ) : (

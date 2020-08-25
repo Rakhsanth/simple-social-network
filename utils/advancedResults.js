@@ -55,10 +55,10 @@ const advancedResults = (model, populate) => {
         const result = await query;
 
         if (pageStartIndex > 0) {
-            pagination.prev = pageStartIndex - 1;
+            pagination.prev = pageNumber - 1;
         }
         if (pageEndIndex < totalNoOfResults) {
-            pagination.next = pageEndIndex + 1;
+            pagination.next = pageNumber + 1;
         }
 
         if (!result) {

@@ -197,7 +197,7 @@ const getGithubRepos = asyncHandler(async (request, response, next) => {
 
     const githubRepos = await axios(config);
 
-    console.log(githubRepos);
+    // console.log(githubRepos);
 
     response.status(200).json({
         success: true,

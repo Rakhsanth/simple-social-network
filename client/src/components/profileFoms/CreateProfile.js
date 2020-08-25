@@ -23,7 +23,7 @@ function CreateProfile(props) {
         website: '',
         location: '',
         skills: '',
-        githubusername: '',
+        githubUserName: '',
         bio: '',
         social: {
             twitter: '',
@@ -173,8 +173,8 @@ function CreateProfile(props) {
                                 <Field
                                     type="text"
                                     placeholder="Github Username"
-                                    name="githubusername"
-                                    id="githubusername"
+                                    name="githubUserName"
+                                    id="githubUserName"
                                 />
                                 <small className="form-text">
                                     If you want your latest repos and a Github

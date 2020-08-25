@@ -1,9 +1,9 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { Redirect, withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { setAlert, createProfile, getCurrentProfile } from '../../actions';
+import { createProfile, getCurrentProfile } from '../../actions';
 import Spinner from '../layouts/Spinner';
 
 function AddExperience(props) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { Redirect, withRouter, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { setAlert, createProfile, getCurrentProfile } from '../../actions';
@@ -18,7 +18,7 @@ function EditProfile(props) {
         website: '',
         location: '',
         skills: '',
-        githubusername: '',
+        githubUserName: '',
         bio: '',
         social: {
             twitter: '',
@@ -43,10 +43,10 @@ function EditProfile(props) {
             website: loading || !profile.website ? '' : profile.website,
             location: loading || !profile.location ? '' : profile.location,
             skills: loading || !profile.skills ? '' : profile.skills.join(','),
-            githubusername:
-                loading || !profile.githubusername
+            githubUserName:
+                loading || !profile.githubUserName
                     ? ''
-                    : profile.githubusername,
+                    : profile.githubUserName,
             bio: loading || !profile.bio ? '' : profile.bio,
             social: {
                 twitter:
@@ -72,8 +72,6 @@ function EditProfile(props) {
             },
         });
     }, [loading]);
-
-    const initialValues = { ...formInitialValues };
 
     const validationSchema = Yup.object({
         status: Yup.string().required('Please select a status'),
@@ -231,8 +229,8 @@ function EditProfile(props) {
                                 <Field
                                     type="text"
                                     placeholder="Github Username"
-                                    name="githubusername"
-                                    id="githubusername"
+                                    name="githubUserName"
+                                    id="githubUserName"
                                 />
                                 <small className="form-text">
                                     If you want your latest repos and a Github

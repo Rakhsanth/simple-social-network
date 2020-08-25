@@ -9,6 +9,12 @@ function Navbar(props) {
     const userLinks = (
         <ul>
             <li>
+                <Link to="/profiles">Developers</Link>
+            </li>
+            <li>
+                <Link to="/posts">Posts</Link>
+            </li>
+            <li>
                 <Link to="/" onClick={props.logout}>
                     <i className="fas fa-sign-out-alt" />{' '}
                     <span className="hide-sm">Logout</span>
@@ -19,7 +25,7 @@ function Navbar(props) {
     const guestLinks = (
         <ul>
             <li>
-                <a href="#!">Developers</a>
+                <Link to="/profiles">Developers</Link>
             </li>
             <li>
                 <Link to="/register">Register</Link>
