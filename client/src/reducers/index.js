@@ -32,6 +32,7 @@ const auth = (state = initialAuthState, action) => {
             };
         case 'REGISTER_SUCCESS':
         case 'LOGIN_SUCCESS':
+        case 'FACEBOOK_LOGIN_SUCCESS':
             localStorage.setItem('token', payload.token);
             return {
                 ...state,
@@ -41,6 +42,7 @@ const auth = (state = initialAuthState, action) => {
             };
         case 'REGISTER_FAIL':
         case 'LOGIN_FAIL':
+        case 'FACEBOOK_LOGIN_FAIL':
         case 'LOGOUT':
         case 'AUTH_ERROR':
             localStorage.removeItem('token');
@@ -86,6 +88,14 @@ const profile = (state = initialProfileState, action) => {
                 loading: false,
             };
         case 'PROFILE_ERROR':
+            if (payload.data === 'No matching profile found') {
+                return {
+                    ...state,
+                    profile: null,
+                    error: payload,
+                    loading: false,
+                };
+            }
             return {
                 ...state,
                 error: payload,
@@ -117,6 +127,51 @@ const post = (state = initialPostState, action) => {
             return {
                 ...state,
                 posts: payload,
+                loading: false,
+            };
+        case 'GET_POST':
+            return {
+                ...state,
+                post: payload,
+                loading: false,
+            };
+        case 'CREATE_POST':
+            return {
+                ...state,
+                posts: [payload, ...state.posts],
+                loading: false,
+            };
+        case 'ADD_LIKES':
+            return {
+                ...state,
+                posts: state.posts.map((post) =>
+                    post._id === payload.postId
+                        ? { ...post, likes: payload.likes }
+                        : post
+                ),
+                loading: false,
+            };
+        case 'CREATE_COMMENT':
+            return {
+                ...state,
+                post: { ...state.post, comments: payload },
+            };
+        case 'DELETE_COMMENT':
+            return {
+                ...state,
+                post: {
+                    ...state.post,
+                    comments: state.post.comments.map(
+                        (comment) => comment._id !== payload
+                    ),
+                },
+            };
+        case 'DELETE_POST':
+            return {
+                ...state,
+                posts: state.posts.filter(
+                    (post) => post._id !== payload.postId
+                ),
                 loading: false,
             };
         case 'POST_ERROR':

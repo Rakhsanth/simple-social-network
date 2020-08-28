@@ -28,6 +28,9 @@ const createPost = asyncHandler(async (request, response, next) => {
 
     request.body.user = user.id;
     request.body.name = user.name;
+    if (user.avatar) {
+        request.body.avatar = user.avatar;
+    }
 
     const post = await Post.create(request.body);
 
@@ -144,6 +147,10 @@ const addComment = asyncHandler(async (request, response, next) => {
         text,
         name: user.name,
     };
+
+    if (user.avatar) {
+        comment.avatar = user.avatar;
+    }
 
     post.comments.unshift(comment);
 

@@ -102,6 +102,39 @@ const getCurrentUser = asyncHandler(async (request, response, next) => {
     });
 });
 
+/*
+@ description : Adding FB user
+@ route : GET api/v1/auth/facebook/login
+@ access : public
+*/
+const facebookLogin = asyncHandler(async (request, response, next) => {
+    const { name, avatar, facebookId } = request.body;
+
+    let user = await User.findOne({ facebookId });
+
+    if (user) {
+        return setTokenToCookie(user, 200, response, 'Log in success');
+    }
+
+    user = await User.create({
+        facebookUser: true,
+        name,
+        avatar,
+        facebookId,
+    });
+
+    if (!user) {
+        return next(
+            new ErrorResponse(
+                'Something went wrong please try again later or try normal sign in',
+                404
+            )
+        );
+    }
+
+    setTokenToCookie(user, 201, response, 'Log in success and user added');
+});
+
 const setTokenToCookie = (user, statusCode, response, message) => {
     const token = user.getSignedJwtToken();
     const options = {
@@ -117,6 +150,7 @@ const setTokenToCookie = (user, statusCode, response, message) => {
         options.secure = true;
     }
     console.log(options);
+    response.header('Access-Control-Allow-Origin', '*');
     response.status(statusCode).cookie('token', token, options).json({
         success: true,
         message,
@@ -128,4 +162,6 @@ module.exports = {
     registerUser,
     loginUser,
     getCurrentUser,
+    facebookLogin,
+    setTokenToCookie,
 };

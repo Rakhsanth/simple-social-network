@@ -20,8 +20,10 @@ function Profile(props) {
 
     return (
         <Fragment>
-            {loading || profile === null ? (
+            {loading ? (
                 <Spinner size="lg" />
+            ) : profile === null ? (
+                <h4>Person does not have a profile yet</h4>
             ) : (
                 <Fragment>
                     <Link to="/profiles" className="btn btn-light">
@@ -32,7 +34,13 @@ function Profile(props) {
                         <ProfileAbout profile={profile} />
                         <ProfileExperience profile={profile} />
                         <ProfileEducation profile={profile} />
-                        <ProfileGitRepos username={profile.githubUserName} />
+                        {profile.githubUserName ? (
+                            <ProfileGitRepos
+                                username={profile.githubUserName}
+                            />
+                        ) : (
+                            <h4>Has not included GitHub profile</h4>
+                        )}
                     </div>
                 </Fragment>
             )}

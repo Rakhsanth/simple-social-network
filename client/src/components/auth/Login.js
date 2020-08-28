@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
+import ReactDOM from 'react-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import FacebookLogin from 'react-facebook-login';
+import { facebookAppId } from '../../config/config';
 // import axios from 'axios';
 import * as Yup from 'yup';
 // action creators
-import { setAlert, login } from '../../actions';
+import { setAlert, login, facebookLogin } from '../../actions';
 
 const initialValues = {
     email: '',
@@ -47,6 +50,18 @@ function Login(props) {
     if (props.isAuthenticated) {
         return <Redirect to="/dashboard" />;
     }
+
+    const handleFacebookLogin = (response) => {
+        console.log(response);
+        const {
+            name,
+            id,
+            picture: {
+                data: { url },
+            },
+        } = response;
+        props.facebookLogin(name, url, id);
+    };
 
     return (
         <Fragment>
@@ -111,6 +126,15 @@ function Login(props) {
             <p className="my-1">
                 Don't have an account? <Link to="/register">Sign Up</Link>
             </p>
+
+            <FacebookLogin
+                appId={facebookAppId}
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={handleFacebookLogin}
+                icon="fa-facebook"
+                cssClass="my-1 btn btn-fb"
+            />
         </Fragment>
     );
 }
@@ -121,4 +145,6 @@ const mapStateToProps = (store) => {
     };
 };
 
-export default connect(mapStateToProps, { setAlert, login })(Login);
+export default connect(mapStateToProps, { setAlert, login, facebookLogin })(
+    Login
+);

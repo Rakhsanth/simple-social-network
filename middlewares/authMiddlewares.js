@@ -22,7 +22,7 @@ const protectRoute = async (request, response, next) => {
     } else if (request.cookies.token) {
         token = request.cookies.token;
     }
-    console.log(token);
+    console.log(`${token}`.green.inverse);
     if (!token) {
         return next(
             new ErrorResponse('not authorized to access this route', 404)

@@ -157,6 +157,11 @@ img {
     color: #333;
 }
 
+.btn-fb {
+    background-color: #415dae;
+    color: #fff;
+}
+
 .btn-primary,
 .bg-primary,
 .badge-primary,

@@ -32,7 +32,7 @@ const advancedResults = (model, populate) => {
             const sortBy = request.query.sort.split(',').join(' ');
             query = query.sort(sortBy);
         } else {
-            query = query.sort('-createdAt');
+            query = query.sort('-createdDate');
         }
 
         const filteredResult = await query;

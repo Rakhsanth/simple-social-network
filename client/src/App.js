@@ -24,6 +24,7 @@ import { loadUser } from './actions';
 import { Provider } from 'react-redux';
 import store from './store';
 import Posts from './components/posts/Posts';
+import Post from './components/posts/Post';
 
 function App() {
     useEffect(() => {
@@ -52,7 +53,7 @@ function App() {
                             />
                             <Route
                                 exact
-                                path="/profile/:id"
+                                path="/profiles/:id"
                                 component={Profile}
                             />
                             <ProtectedRoutes
@@ -84,6 +85,11 @@ function App() {
                                 exact
                                 path="/posts"
                                 component={Posts}
+                            />
+                            <ProtectedRoutes
+                                exact
+                                path="/posts/:id"
+                                component={Post}
                             />
                         </Switch>
                     </section>

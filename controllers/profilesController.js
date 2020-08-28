@@ -147,7 +147,7 @@ const getProfileByUserId = asyncHandler(async (request, response, next) => {
     );
 
     if (!profile) {
-        return next(new ErrorResponse('No matching profile found', 401));
+        return next(new ErrorResponse('No matching profile found', 404));
     }
 
     response.status(200).json({

@@ -7,7 +7,9 @@ function ProfileItem(props) {
         <div className="profile bg-light">
             <img
                 className="round-img"
-                src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                src={
+                    'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200'
+                }
                 alt=""
             />
             <div>
@@ -18,7 +20,7 @@ function ProfileItem(props) {
                 </p>
                 <p>{profile.location}</p>
                 <Link
-                    to={`/profile/${profile.user._id}`}
+                    to={`/profiles/${profile.user._id}`}
                     className="btn btn-primary"
                 >
                     View Profile

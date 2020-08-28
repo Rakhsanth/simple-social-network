@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const colors = require('colors');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const passport = require('passport');
 // core modules
 const path = require('path');
 // custom modules
@@ -22,7 +23,28 @@ dotenv.config({
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // To make passing and receiving cookies
+// cors related stuff
+// const whitelist = ['http://localhost:3000'];
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// };
+
+app.use(
+    cors({
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:4010/api/v1/auth/facebookLogin',
+        ],
+        credentials: true,
+    })
+); // To make passing and receiving cookies
 
 connectDB();
 
@@ -33,6 +55,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use(passport.initialize()); // For passport JS
+app.use(passport.session());
 
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/auth', authRoutes);

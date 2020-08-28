@@ -90,8 +90,45 @@ export const login = (email, password) => {
         }
     };
 };
-// Login actions
-// Async action
+// Facebook login actions
+export const facebookLogin = (name, avatar, facebookId) => {
+    return async function (dispatch) {
+        let body = {
+            facebookUser: true,
+            name,
+            avatar,
+            facebookId,
+        };
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: false,
+        };
+        try {
+            const response = await axios.post(
+                `http://localhost:4010/api/v1/auth/facebookLogin`,
+                body,
+                config
+            );
+            console.log(response);
+            dispatch({
+                type: 'FACEBOOK_LOGIN_SUCCESS',
+                payload: { token: response.data.token },
+            });
+            dispatch(loadUser());
+        } catch (err) {
+            console.log('Shit It cam ehere');
+            console.log(err.response);
+            dispatch(setAlert(err.response.data.data, 'danger'));
+            dispatch({
+                type: 'FACEBOOK_LOGIN_FAIL',
+            });
+        }
+    };
+};
+// Normal action for logout
 export const logout = () => {
     return function (dispatch) {
         dispatch({ type: 'LOGOUT' });
@@ -367,6 +404,186 @@ export const getAllPosts = (pageNumber = 1) => {
                 axiosConfig
             );
             dispatch({ type: 'GET_POSTS', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Get single post by ID action
+export const getPost = (postId) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            const response = await axios.get(
+                `http://localhost:4010/api/v1/posts/${postId}`,
+                axiosConfig
+            );
+            dispatch({ type: 'GET_POST', payload: response.data.data });
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Adding likes action
+export const addLikes = (postId) => {
+    return async function (dispatch) {
+        try {
+            console.log(postId);
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            console.log(token);
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            const response = await axios.put(
+                `http://localhost:4010/api/v1/posts/likes/${postId}`,
+                {},
+                axiosConfig
+            );
+            dispatch({
+                type: 'ADD_LIKES',
+                payload: { postId, likes: response.data.data },
+            });
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Adding create post action
+export const createPost = (formValue) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            console.log(token);
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            const body = formValue;
+            const response = await axios.post(
+                `http://localhost:4010/api/v1/posts`,
+                body,
+                axiosConfig
+            );
+            dispatch({
+                type: 'CREATE_POST',
+                payload: response.data.data,
+            });
+            dispatch(setAlert('Post successfully deleted', 'success'));
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Adding delete post action
+export const deletePost = (postId) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            console.log(token);
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            await axios.delete(
+                `http://localhost:4010/api/v1/posts/${postId}`,
+                axiosConfig
+            );
+            dispatch({
+                type: 'DELETE_POST',
+                payload: { postId },
+            });
+            dispatch(setAlert('Post successfully deleted', 'success'));
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Add a comment action
+export const addComment = (postId, formValue) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            console.log(token);
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            const body = formValue;
+            const response = await axios.post(
+                `http://localhost:4010/api/v1/posts/comments/${postId}`,
+                body,
+                axiosConfig
+            );
+            dispatch({
+                type: 'CREATE_COMMENT',
+                payload: response.data.data,
+            });
+            dispatch(setAlert('Comment successfully added', 'success'));
+        } catch (err) {
+            dispatch({ type: 'POST_ERROR', payload: err.response.data });
+            dispatch(setAlert(err.response.data.data, 'danger'));
+        }
+    };
+};
+// Adding delete post action
+export const deleteComment = (postId, commentId) => {
+    return async function (dispatch) {
+        try {
+            let token;
+            if (localStorage.token) {
+                token = localStorage.getItem('token');
+            }
+            console.log(token);
+            const axiosConfig = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            };
+            await axios.delete(
+                `http://localhost:4010/api/v1/posts/comments/${postId}/${commentId}`,
+                axiosConfig
+            );
+            dispatch({
+                type: 'DELETE_COMMENT',
+                payload: commentId,
+            });
+            dispatch(setAlert('Post successfully deleted', 'success'));
         } catch (err) {
             dispatch({ type: 'POST_ERROR', payload: err.response.data });
             dispatch(setAlert(err.response.data.data, 'danger'));
