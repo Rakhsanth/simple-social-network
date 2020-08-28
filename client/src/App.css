@@ -612,3 +612,35 @@ button {
     margin: auto;
     display: block;
 }
+.center {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.file-upload-container {
+    margin: 0 auto;
+    height: 15rem;
+    width: 15rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    background-image: url('./img/user.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.picture-upload {
+    height: 0.1px;
+    width: 0.1px;
+    overflow: hidden;
+}
+.picture-upload-label {
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: var(--light-color);
+    border-radius: 1rem;
+}

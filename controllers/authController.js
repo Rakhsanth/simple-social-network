@@ -104,7 +104,7 @@ const getCurrentUser = asyncHandler(async (request, response, next) => {
 
 /*
 @ description : Adding FB user
-@ route : GET api/v1/auth/facebook/login
+@ route : GET api/v1/auth/facebookLogin
 @ access : public
 */
 const facebookLogin = asyncHandler(async (request, response, next) => {

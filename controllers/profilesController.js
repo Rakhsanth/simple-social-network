@@ -4,12 +4,14 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 // core modules
-const ErrorResponse = require('../utils/errorWrapper');
+const path = require('path');
 // custom modules
 const User = require('../models/User');
 const Profile = require('../models/Profile');
 const asyncHandler = require('../middlewares/asyncHandler');
-
+const { uploadImageToGoogleBucket } = require('../fileUploads/fileUploader');
+const ErrorResponse = require('../utils/errorWrapper');
+const { findByIdAndUpdate } = require('../models/User');
 /*
 @ description : Get current logged in user details
 @ route : GET api/v1/profiles/me
@@ -142,7 +144,7 @@ const getProfileByUserId = asyncHandler(async (request, response, next) => {
     const profile = await Profile.findOne({ user: request.params.id }).populate(
         {
             path: 'user',
-            select: 'name',
+            select: 'name avatar',
         }
     );
 
@@ -207,6 +209,76 @@ const getGithubRepos = asyncHandler(async (request, response, next) => {
     });
 });
 
+/*
+@ description : Upload profile picture
+@ route : PUT api/v1/profiles/picture/upload/:id
+@ access : private(user)
+*/
+const uploadProfilePicture = asyncHandler(async (request, response, next) => {
+    const picture = request.files.profilePicture;
+
+    const user = await User.findById(request.params.id);
+
+    if (!user) {
+        return next(new ErrorResponse('User does not exist', 404));
+    }
+
+    if (user.id.toString() !== request.user.id) {
+        return next(
+            new ErrorResponse(
+                'User not authorized to edit this profile picture',
+                401
+            )
+        );
+    }
+
+    const supportedFiles = ['jpeg', 'jpg', 'png'];
+
+    console.log(picture);
+
+    if (picture.size > 3 * 1024 * 1024) {
+        return next(
+            new ErrorResponse('Please upload file size less that 3 MB', 404)
+        );
+    }
+    if (
+        picture.mimetype &&
+        supportedFiles.indexOf(picture.mimetype.split('/')[1]) === -1
+    ) {
+        return next(
+            new ErrorResponse(
+                'Please upload files of jpeg or jpg or png only',
+                404
+            )
+        );
+    }
+
+    picture.name = `profilePicture_${request.params.id}_${
+        path.parse(picture.name).ext
+    }`;
+
+    const profilePictureURL = await uploadImageToGoogleBucket(picture);
+    if (!profilePictureURL) {
+        return next(
+            new ErrorResponse(
+                'Problem uploading to cloud, please try again later',
+                500
+            )
+        );
+    }
+
+    await User.findByIdAndUpdate(request.params.id, {
+        avatar: profilePictureURL,
+    });
+
+    response.status(200).json({
+        success: true,
+        message: 'picture uploaded successfully',
+        imageURL: profilePictureURL,
+        error: false,
+    });
+});
+
 module.exports = {
     getCurrentUserProfile,
     createProfile,
@@ -215,4 +287,5 @@ module.exports = {
     getProfileByUserId,
     deleteUserAndProfile,
     getGithubRepos,
+    uploadProfilePicture,
 };

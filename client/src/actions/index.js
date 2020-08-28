@@ -29,7 +29,6 @@ export const register = (name, email, password) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCredentials: true,
         };
         try {
             const response = await axios.post(
@@ -66,7 +65,6 @@ export const login = (email, password) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            withCredentials: true,
         };
         try {
             const response = await axios.post(
@@ -119,7 +117,7 @@ export const facebookLogin = (name, avatar, facebookId) => {
             });
             dispatch(loadUser());
         } catch (err) {
-            console.log('Shit It cam ehere');
+            console.log('Shit It cam here');
             console.log(err.response);
             dispatch(setAlert(err.response.data.data, 'danger'));
             dispatch({
@@ -207,6 +205,7 @@ export const getProfiles = () => {
 // Get profile by user ID
 export const getProfileByUserId = (userId) => {
     return async function (dispatch) {
+        dispatch({ type: 'CLEAR_PROFILE' });
         try {
             // const config = {
             //     headers: {

@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { setAlert, createProfile, getCurrentProfile } from '../../actions';
+import ProfilePictureUpload from './ProfilePictureUpload';
 
 function EditProfile(props) {
     const {
@@ -103,6 +104,7 @@ function EditProfile(props) {
                 to date to make your profile stand out
             </p>
             <small>* = required field</small>
+            <ProfilePictureUpload profile={profile} />
             <Formik
                 initialValues={JSON.parse(JSON.stringify(formInitialValues))}
                 validationSchema={validationSchema}

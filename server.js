@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const colors = require('colors');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const passport = require('passport');
+const fileUpload = require('express-fileupload');
 // core modules
 const path = require('path');
 // custom modules
@@ -36,15 +36,7 @@ const app = express();
 //     credentials: true,
 // };
 
-app.use(
-    cors({
-        origin: [
-            'http://localhost:3000',
-            'http://localhost:4010/api/v1/auth/facebookLogin',
-        ],
-        credentials: true,
-    })
-); // To make passing and receiving cookies
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // To make passing and receiving cookies
 
 connectDB();
 
@@ -56,8 +48,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-app.use(passport.initialize()); // For passport JS
-app.use(passport.session());
+app.use(fileUpload());
 
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/auth', authRoutes);

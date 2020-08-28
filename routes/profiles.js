@@ -10,7 +10,9 @@ const {
     getProfileByUserId,
     deleteUserAndProfile,
     getGithubRepos,
+    uploadProfilePicture,
 } = require('../controllers/profilesController');
+const uploadProfileImage = require('../fileUploads/fileUploader');
 const Profile = require('../models/Profile');
 const advancedResults = require('../utils/advancedResults');
 
@@ -18,7 +20,7 @@ const router = express.Router();
 
 const populate = {
     path: 'user', // This us the ref using in this mongoose schema (foreign field)
-    select: 'name',
+    select: 'name avatar',
 };
 
 router.route('/me').get(protectRoute, getCurrentUserProfile);
@@ -34,6 +36,8 @@ router
     .delete(protectRoute, deleteUserAndProfile);
 
 router.route('/github/:username').get(getGithubRepos);
+
+router.route('/picture/upload/:id').put(protectRoute, uploadProfilePicture);
 
 // router.route('/')
 

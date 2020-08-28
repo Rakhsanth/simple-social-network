@@ -106,7 +106,7 @@ const profile = (state = initialProfileState, action) => {
                 ...state,
                 profile: null,
                 repos: [],
-                loading: false,
+                loading: true,
             };
         default:
             return state;

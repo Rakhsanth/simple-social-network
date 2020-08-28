@@ -11,11 +11,11 @@ function CommentItem(props) {
         auth: { loading, user },
     } = props;
     return comment ? (
-        <div class="post bg-white p-1 my-1">
+        <div className="post bg-white p-1 my-1">
             <div>
                 <Link to={`profiles/${comment.user}`}>
                     <img
-                        class="round-img"
+                        className="round-img"
                         src={
                             comment.avatar
                                 ? comment.avatar
@@ -27,8 +27,8 @@ function CommentItem(props) {
                 </Link>
             </div>
             <div>
-                <p class="my-1">{comment.text}</p>
-                <p class="post-date">
+                <p className="my-1">{comment.text}</p>
+                <p className="post-date">
                     Posted on{' '}
                     <Moment format="YYYY-MM-DD">{comment.createdDate}</Moment>
                 </p>
@@ -36,10 +36,10 @@ function CommentItem(props) {
             {!loading && user._id === comment.user ? (
                 <button
                     type="button"
-                    class="btn btn-danger"
+                    className="btn btn-danger"
                     onClick={() => props.deleteComment(postId, comment._id)}
                 >
-                    <i class="fas fa-times"></i>
+                    <i className="fas fa-times"></i>
                 </button>
             ) : null}
         </div>
