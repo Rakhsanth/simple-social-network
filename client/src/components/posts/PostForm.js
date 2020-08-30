@@ -12,7 +12,6 @@ function PostForm(props) {
         text: Yup.string().required('Some text is required to post something'),
     });
     const onSubmit = (values, onSubmitProps) => {
-        console.log(values);
         props.createPost(values);
         onSubmitProps.resetForm();
     };
@@ -29,9 +28,7 @@ function PostForm(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
                     if (!formik.isValid && formik.isSubmitting) {
-                        console.log('validation is happening');
                         props.setAlert(
                             'Please enter some text to post',
                             'danger'

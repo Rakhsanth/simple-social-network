@@ -4,8 +4,6 @@ import { getAllPosts, setAlert } from '../../actions';
 import Spinner from '../layouts/Spinner';
 import PostItem from './PostItem';
 import PostForm from './PostForm';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 
 function Posts(props) {
     const {

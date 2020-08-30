@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -43,7 +42,6 @@ const validationSchema = Yup.object({
 function Login(props) {
     const onSubmit = async (values, onSubmitProps) => {
         const { email, password } = values;
-        console.log(values);
         props.login(email, password);
     };
 
@@ -52,7 +50,6 @@ function Login(props) {
     }
 
     const handleFacebookLogin = (response) => {
-        console.log(response);
         const {
             name,
             id,
@@ -75,9 +72,7 @@ function Login(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
                     if (!formik.isValid && formik.isSubmitting) {
-                        console.log('I am getting validated');
                         props.setAlert(
                             'Please fill the form based on instructions',
                             'danger'

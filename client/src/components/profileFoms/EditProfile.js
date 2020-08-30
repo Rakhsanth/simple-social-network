@@ -30,12 +30,7 @@ function EditProfile(props) {
         },
     });
 
-    console.log('re-rendering the shit');
-    console.log(formInitialValues);
-
     useEffect(() => {
-        console.log('useEffect running');
-
         props.getCurrentProfile();
 
         setFormInitialValues({
@@ -80,7 +75,6 @@ function EditProfile(props) {
     });
 
     const onSubmit = (values, onSubmitProps) => {
-        console.log(values);
         props.createProfile(values, history, true);
     };
 
@@ -112,7 +106,6 @@ function EditProfile(props) {
                 enableReinitialize
             >
                 {(formik) => {
-                    console.log(formik);
                     if (!formik.isValid && formik.isSubmitting) {
                         props.setAlert(
                             'Please fill all the required fields',

@@ -36,14 +36,12 @@ export const register = (name, email, password) => {
                 body,
                 config
             );
-            console.log(response.data);
             dispatch({
                 type: 'REGISTER_SUCCESS',
                 payload: { token: response.data.token },
             });
             dispatch(loadUser());
         } catch (err) {
-            console.log(err.response.data);
             dispatch(setAlert(err.response.data.data, 'danger'));
             dispatch({
                 type: 'REGISTER_FAIL',
@@ -72,15 +70,12 @@ export const login = (email, password) => {
                 body,
                 config
             );
-            console.log(response);
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 payload: { token: response.data.token },
             });
             dispatch(loadUser());
         } catch (err) {
-            console.log('Shit It cam ehere');
-            console.log(err.response);
             dispatch(setAlert(err.response.data.data, 'danger'));
             dispatch({
                 type: 'LOGIN_FAIL',
@@ -110,15 +105,12 @@ export const facebookLogin = (name, avatar, facebookId) => {
                 body,
                 config
             );
-            console.log(response);
             dispatch({
                 type: 'FACEBOOK_LOGIN_SUCCESS',
                 payload: { token: response.data.token },
             });
             dispatch(loadUser());
         } catch (err) {
-            console.log('Shit It cam here');
-            console.log(err.response);
             dispatch(setAlert(err.response.data.data, 'danger'));
             dispatch({
                 type: 'FACEBOOK_LOGIN_FAIL',
@@ -256,7 +248,6 @@ export const createProfile = (
         if (localStorage.token) {
             token = localStorage.getItem('token');
         }
-        console.log(formValues);
         let body = {};
         try {
             const config = {
@@ -317,7 +308,6 @@ export const createProfile = (
                     );
                 }
             }
-            console.log(response.data.data);
             dispatch({ type: 'GET_PROFILE', payload: response.data.data });
             history.push('/dashboard');
             dispatch(
@@ -329,8 +319,6 @@ export const createProfile = (
                 )
             );
         } catch (err) {
-            console.log(err);
-            console.log(err.response.data);
             dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
         }
     };
@@ -342,7 +330,6 @@ export const deleteExpOrEdu = (listToUpdate, expOrEdu, profile) => {
         if (localStorage.token) {
             token = localStorage.getItem('token');
         }
-        console.log(listToUpdate);
         let body = {};
         try {
             const config = {
@@ -373,12 +360,9 @@ export const deleteExpOrEdu = (listToUpdate, expOrEdu, profile) => {
                     config
                 );
             }
-            console.log(response.data.data);
             dispatch({ type: 'GET_PROFILE', payload: response.data.data });
             dispatch(setAlert('Profile updated successfully', 'success'));
         } catch (err) {
-            console.log(err);
-            console.log(err.response.data);
             dispatch({ type: 'PROFILE_ERROR', payload: err.response.data });
         }
     };
@@ -438,12 +422,10 @@ export const getPost = (postId) => {
 export const addLikes = (postId) => {
     return async function (dispatch) {
         try {
-            console.log(postId);
             let token;
             if (localStorage.token) {
                 token = localStorage.getItem('token');
             }
-            console.log(token);
             const axiosConfig = {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -473,7 +455,6 @@ export const createPost = (formValue) => {
             if (localStorage.token) {
                 token = localStorage.getItem('token');
             }
-            console.log(token);
             const axiosConfig = {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -505,7 +486,6 @@ export const deletePost = (postId) => {
             if (localStorage.token) {
                 token = localStorage.getItem('token');
             }
-            console.log(token);
             const axiosConfig = {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -535,7 +515,6 @@ export const addComment = (postId, formValue) => {
             if (localStorage.token) {
                 token = localStorage.getItem('token');
             }
-            console.log(token);
             const axiosConfig = {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -567,7 +546,6 @@ export const deleteComment = (postId, commentId) => {
             if (localStorage.token) {
                 token = localStorage.getItem('token');
             }
-            console.log(token);
             const axiosConfig = {
                 headers: {
                     Authorization: `Bearer ${token}`,

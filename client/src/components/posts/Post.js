@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect } from 'react';
-import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import Spinner from '../layouts/Spinner';
 import PostItem from './PostItem';

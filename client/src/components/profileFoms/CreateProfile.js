@@ -40,7 +40,6 @@ function CreateProfile(props) {
     });
 
     const onSubmit = (values, onSubmitProps) => {
-        console.log(values);
         props.createProfile(values, history);
     };
 
@@ -70,7 +69,6 @@ function CreateProfile(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
                     if (!formik.isValid && formik.isSubmitting) {
                         props.setAlert(
                             'Please fill all the required fields',

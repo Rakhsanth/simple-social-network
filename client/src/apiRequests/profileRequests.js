@@ -20,8 +20,8 @@ export const uploadProfilePicture = async (profilePicture, id) => {
             formData,
             axiosConfig
         );
-        console.log(response.data);
+        return true;
     } catch (err) {
-        console.log(err.response.data);
+        return false;
     }
 };

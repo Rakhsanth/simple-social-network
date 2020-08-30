@@ -50,7 +50,6 @@ const validationSchema = Yup.object({
 
 function Register(props) {
     const onSubmit = async (values) => {
-        console.log(values);
         const { name, email, password } = values;
         props.register(name, email, password);
     };
@@ -71,9 +70,7 @@ function Register(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
                     if (!formik.isValid && formik.isSubmitting) {
-                        console.log('I am getting validated');
                         props.setAlert(
                             'Please fill the form based on instructions',
                             'danger'

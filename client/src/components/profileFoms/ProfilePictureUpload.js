@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions';
 import { uploadProfilePicture } from '../../apiRequests/profileRequests';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 
 function ProfilePictureUpload(props) {
+    console.log('rerendering');
+
     const { profile, history } = props;
+
+    let pictureUploaded = false;
 
     const supportedFiles = ['jpeg', 'jpg', 'png'];
 
@@ -19,12 +23,17 @@ function ProfilePictureUpload(props) {
         profilePicture: Yup.mixed().required('Please select a file to upload'),
     });
 
-    const onSubmit = (values, onSubmitProps) => {
+    const onSubmit = async (values, onSubmitProps) => {
         const { profilePicture } = values;
         console.log(profilePicture);
         console.log(onSubmitProps);
-        uploadProfilePicture(profilePicture, profile.user._id);
-        return <Redirect to="/dashboard" />;
+        pictureUploaded = await uploadProfilePicture(
+            profilePicture,
+            profile.user._id
+        );
+        if (pictureUploaded) {
+            props.setAlert('Picture successfully updated', 'success');
+        }
     };
 
     const handleFileUpload = (event, form) => {
@@ -32,14 +41,16 @@ function ProfilePictureUpload(props) {
     };
 
     return (
-        <div>
+        <Fragment>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
+                    if (pictureUploaded) {
+                        return <Redirect to="/dashboard" />;
+                    }
                     if (
                         formik.values.profilePicture &&
                         supportedFiles.indexOf(
@@ -67,7 +78,7 @@ function ProfilePictureUpload(props) {
                         <Form className="form">
                             <Field>
                                 {(fieldPrps) => {
-                                    const { field, form, meta } = fieldPrps;
+                                    const { form } = fieldPrps;
 
                                     return (
                                         <div className="file-upload-container">
@@ -105,7 +116,7 @@ function ProfilePictureUpload(props) {
                     );
                 }}
             </Formik>
-        </div>
+        </Fragment>
     );
 }
 

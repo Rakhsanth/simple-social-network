@@ -33,9 +33,9 @@ const paymentHandler = async (event) => {
                 const paymentId = response.razorpay_payment_id;
                 const url = `${API_URL}/capture/${paymentId}`;
                 const captureResponse = await axios.post(url, {});
-                console.log(captureResponse.data);
+                // console.log(captureResponse.data);
             } catch (err) {
-                console.log(err);
+                // console.log(err);
             }
         },
         theme: {
@@ -67,9 +67,8 @@ function Donation(props) {
         try {
             const response = await axios.get(orderUrl);
             data = response.data.data;
-            console.log(data);
         } catch (err) {
-            console.log(err.response.data);
+            // console.log(err.response.data);
         }
 
         const options = {
@@ -104,7 +103,6 @@ function Donation(props) {
                     body,
                     axiosConfig
                 );
-                console.log(confirmedResponse.data.data);
             },
             theme: {
                 color: '#686CFD',
@@ -131,8 +129,6 @@ function Donation(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
-
                     if (!formik.isValid && formik.isSubmitting) {
                         props.setAlert(
                             'Please enter as directed in the form',

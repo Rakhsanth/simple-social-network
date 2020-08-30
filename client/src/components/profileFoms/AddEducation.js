@@ -38,7 +38,6 @@ function AddEducation(props) {
             'Provide to-date if this is not your current job!',
             function (to) {
                 const { current } = this.parent;
-                console.log(current.length);
                 if (current.length !== 0 && !to) {
                     return true;
                 }
@@ -53,10 +52,6 @@ function AddEducation(props) {
     });
 
     const onSubmit = (values) => {
-        // if (values.current.length !== 0) {
-        //     values.current = true;
-        // }
-        console.log(values);
         props.createProfile(values, history, false, 'edu', profile);
     };
 
@@ -76,7 +71,6 @@ function AddEducation(props) {
                 onSubmit={onSubmit}
             >
                 {(formik) => {
-                    console.log(formik);
                     if (formik.values.current.length !== 0) {
                         formik.values.to = '';
                     }
@@ -132,7 +126,6 @@ function AddEducation(props) {
                                 <p>
                                     <Field name="current">
                                         {({ field }) => {
-                                            console.log(field);
                                             return currentOptions.map(
                                                 (option) => {
                                                     return (
