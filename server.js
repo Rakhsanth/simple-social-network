@@ -15,6 +15,7 @@ const usersRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const profilesRoutes = require('./routes/profiles');
 const postRoutes = require('./routes/posts');
+const paymentRoutes = require('./routes/payments');
 const mongoErrorHandler = require('./middlewares/mongoErrorHandler');
 
 dotenv.config({
@@ -54,6 +55,7 @@ app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/profiles', profilesRoutes);
 app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/payments', paymentRoutes);
 
 app.use(mongoErrorHandler);
 

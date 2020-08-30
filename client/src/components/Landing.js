@@ -1,12 +1,16 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import Spinner from './layouts/Spinner';
 
 const userLinks = (
     <Fragment>
         <Link to="/dashboard" className="btn btn-primary">
             Dashboard
+        </Link>
+        <Link to="/donate" className="btn btn-success">
+            Donate
         </Link>
     </Fragment>
 );
@@ -18,6 +22,9 @@ const guestLinks = (
         </Link>
         <Link to="/login" className="btn btn-light">
             Login
+        </Link>
+        <Link to="/donate" className="btn btn-success">
+            Donate
         </Link>
     </Fragment>
 );

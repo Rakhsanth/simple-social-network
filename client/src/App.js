@@ -25,6 +25,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Posts from './components/posts/Posts';
 import Post from './components/posts/Post';
+import Donation from './components/payments/Donation';
 
 function App() {
     useEffect(() => {
@@ -46,6 +47,7 @@ function App() {
                                 path="/register"
                                 component={Register}
                             />
+                            <Route exact path="/donate" component={Donation} />
                             <Route
                                 exact
                                 path="/profiles"
