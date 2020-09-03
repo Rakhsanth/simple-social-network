@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { setAlert } from '../../actions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { backendBaseURL } from '../../config/config';
 
 const validateAmount = (amount) => {
     if (!amount) {
@@ -17,36 +19,9 @@ const validateAmount = (amount) => {
     return true;
 };
 
-const paymentHandler = async (event) => {
-    const API_URL = 'http://localhost:4010';
-    event.preventDefault();
-    const orderUrl = `${API_URL}/donate`;
-    const response = await axios.get(orderUrl);
-    const { data } = response;
-    const options = {
-        key: razorpayAPIKeyId,
-        name: 'Tech Network',
-        description: 'Any amount would be accepted as donation',
-        order_id: data.id,
-        handler: async (response) => {
-            try {
-                const paymentId = response.razorpay_payment_id;
-                const url = `${API_URL}/capture/${paymentId}`;
-                const captureResponse = await axios.post(url, {});
-                // console.log(captureResponse.data);
-            } catch (err) {
-                // console.log(err);
-            }
-        },
-        theme: {
-            color: '#686CFD',
-        },
-    };
-    const rzp1 = new window.Razorpay(options);
-    rzp1.open();
-};
-
 function Donation(props) {
+    const { history } = props;
+
     const initialValues = {
         amount: '',
     };
@@ -61,7 +36,7 @@ function Donation(props) {
 
     const onSubmit = async (values, onSubmitProps) => {
         const { amount } = values;
-        const API_URL = 'http://localhost:4010/api/v1/payments';
+        const API_URL = `${backendBaseURL}/api/v1/payments`;
         const orderUrl = `${API_URL}/order/${amount}`;
         let data;
         try {
@@ -79,9 +54,6 @@ function Donation(props) {
             description: 'Any amount would be accepted as donation',
             order_id: data.id,
             handler: async (response) => {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
                 const {
                     razorpay_payment_id,
                     razorpay_order_id,
@@ -103,13 +75,23 @@ function Donation(props) {
                     body,
                     axiosConfig
                 );
+                // console.log(confirmedResponse.data);
+                if (confirmedResponse.data.success) {
+                    props.setAlert(
+                        confirmedResponse.data.data.message,
+                        'success'
+                    );
+                } else {
+                    props.setAlert(confirmedResponse.data.data, 'danger');
+                }
+                history.push('/');
             },
             theme: {
                 color: '#686CFD',
             },
         };
-        const rzp1 = new window.Razorpay(options);
-        rzp1.open();
+        const rzp = new window.Razorpay(options);
+        rzp.open();
         onSubmitProps.resetForm();
     };
 
@@ -178,4 +160,4 @@ function Donation(props) {
     );
 }
 
-export default connect(null, { setAlert })(Donation);
+export default connect(null, { setAlert })(withRouter(Donation));

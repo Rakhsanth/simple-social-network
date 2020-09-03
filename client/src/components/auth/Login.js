@@ -129,6 +129,7 @@ function Login(props) {
                 callback={handleFacebookLogin}
                 icon="fa-facebook"
                 cssClass="my-1 btn btn-fb"
+                disableMobileRedirect={true}
             />
         </Fragment>
     );

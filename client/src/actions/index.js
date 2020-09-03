@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { backendBaseURL } from '../config/config';
 
 // utils
 
@@ -32,7 +33,7 @@ export const register = (name, email, password) => {
         };
         try {
             const response = await axios.post(
-                `http://localhost:4010/api/v1/auth/register`,
+                `${backendBaseURL}/api/v1/auth/register`,
                 body,
                 config
             );
@@ -66,7 +67,7 @@ export const login = (email, password) => {
         };
         try {
             const response = await axios.post(
-                `http://localhost:4010/api/v1/auth/login`,
+                `${backendBaseURL}/api/v1/auth/login`,
                 body,
                 config
             );
@@ -101,7 +102,7 @@ export const facebookLogin = (name, avatar, facebookId) => {
         };
         try {
             const response = await axios.post(
-                `http://localhost:4010/api/v1/auth/facebookLogin`,
+                `${backendBaseURL}/api/v1/auth/facebookLogin`,
                 body,
                 config
             );
@@ -140,7 +141,7 @@ export const loadUser = () => {
                 withCredentials: true,
             };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/auth/me`,
+                `${backendBaseURL}/api/v1/auth/me`,
                 config
             );
             dispatch({ type: 'USER_LOADED', payload: response.data.data });
@@ -164,7 +165,7 @@ export const getCurrentProfile = () => {
                 withCredentials: true,
             };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/profiles/me`,
+                `${backendBaseURL}/api/v1/profiles/me`,
                 config
             );
             dispatch({ type: 'GET_PROFILE', payload: response.data.data });
@@ -185,7 +186,7 @@ export const getProfiles = () => {
             //     withCredentials: true,
             // };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/profiles`
+                `${backendBaseURL}/api/v1/profiles`
                 // config
             );
             dispatch({ type: 'GET_PROFILES', payload: response.data.data });
@@ -206,7 +207,7 @@ export const getProfileByUserId = (userId) => {
             //     withCredentials: true,
             // };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/profiles/users/${userId}`
+                `${backendBaseURL}/api/v1/profiles/users/${userId}`
                 // config
             );
             dispatch({ type: 'GET_PROFILE', payload: response.data.data });
@@ -226,7 +227,7 @@ export const getGithubRepos = (username) => {
             //     withCredentials: true,
             // };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/profiles/github/${username}`
+                `${backendBaseURL}/api/v1/profiles/github/${username}`
                 // config
             );
             dispatch({ type: 'GET_REPOS', payload: response.data.data });
@@ -270,7 +271,7 @@ export const createProfile = (
                 body.experience.push(experience);
                 body.overwrite = false;
                 response = await axios.put(
-                    `http://localhost:4010/api/v1/profiles`,
+                    `${backendBaseURL}/api/v1/profiles`,
                     body,
                     config
                 );
@@ -287,7 +288,7 @@ export const createProfile = (
                 body.education.push(education);
                 body.overwrite = false;
                 response = await axios.put(
-                    `http://localhost:4010/api/v1/profiles`,
+                    `${backendBaseURL}/api/v1/profiles`,
                     body,
                     config
                 );
@@ -296,13 +297,13 @@ export const createProfile = (
                 if (edit) {
                     // body.overwrite = true;
                     response = await axios.put(
-                        `http://localhost:4010/api/v1/profiles`,
+                        `${backendBaseURL}/api/v1/profiles`,
                         body,
                         config
                     );
                 } else {
                     response = await axios.post(
-                        `http://localhost:4010/api/v1/profiles`,
+                        `${backendBaseURL}/api/v1/profiles`,
                         body,
                         config
                     );
@@ -345,7 +346,7 @@ export const deleteExpOrEdu = (listToUpdate, expOrEdu, profile) => {
                 body.experience = listToUpdate;
                 body.overwrite = false;
                 response = await axios.put(
-                    `http://localhost:4010/api/v1/profiles`,
+                    `${backendBaseURL}/api/v1/profiles`,
                     body,
                     config
                 );
@@ -355,7 +356,7 @@ export const deleteExpOrEdu = (listToUpdate, expOrEdu, profile) => {
                 body.education = listToUpdate;
                 body.overwrite = false;
                 response = await axios.put(
-                    `http://localhost:4010/api/v1/profiles`,
+                    `${backendBaseURL}/api/v1/profiles`,
                     body,
                     config
                 );
@@ -383,7 +384,7 @@ export const getAllPosts = (pageNumber = 1) => {
                 withCredentials: true,
             };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/posts?page=${pageNumber}`,
+                `${backendBaseURL}/api/v1/posts?page=${pageNumber}`,
                 axiosConfig
             );
             dispatch({ type: 'GET_POSTS', payload: response.data.data });
@@ -408,7 +409,7 @@ export const getPost = (postId) => {
                 withCredentials: true,
             };
             const response = await axios.get(
-                `http://localhost:4010/api/v1/posts/${postId}`,
+                `${backendBaseURL}/api/v1/posts/${postId}`,
                 axiosConfig
             );
             dispatch({ type: 'GET_POST', payload: response.data.data });
@@ -433,7 +434,7 @@ export const addLikes = (postId) => {
                 withCredentials: true,
             };
             const response = await axios.put(
-                `http://localhost:4010/api/v1/posts/likes/${postId}`,
+                `${backendBaseURL}/api/v1/posts/likes/${postId}`,
                 {},
                 axiosConfig
             );
@@ -463,7 +464,7 @@ export const createPost = (formValue) => {
             };
             const body = formValue;
             const response = await axios.post(
-                `http://localhost:4010/api/v1/posts`,
+                `${backendBaseURL}/api/v1/posts`,
                 body,
                 axiosConfig
             );
@@ -493,7 +494,7 @@ export const deletePost = (postId) => {
                 withCredentials: true,
             };
             await axios.delete(
-                `http://localhost:4010/api/v1/posts/${postId}`,
+                `${backendBaseURL}/api/v1/posts/${postId}`,
                 axiosConfig
             );
             dispatch({
@@ -523,7 +524,7 @@ export const addComment = (postId, formValue) => {
             };
             const body = formValue;
             const response = await axios.post(
-                `http://localhost:4010/api/v1/posts/comments/${postId}`,
+                `${backendBaseURL}/api/v1/posts/comments/${postId}`,
                 body,
                 axiosConfig
             );
@@ -553,7 +554,7 @@ export const deleteComment = (postId, commentId) => {
                 withCredentials: true,
             };
             await axios.delete(
-                `http://localhost:4010/api/v1/posts/comments/${postId}/${commentId}`,
+                `${backendBaseURL}/api/v1/posts/comments/${postId}/${commentId}`,
                 axiosConfig
             );
             dispatch({

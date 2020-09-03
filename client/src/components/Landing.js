@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Spinner from './layouts/Spinner';
-
 const userLinks = (
     <Fragment>
         <Link to="/dashboard" className="btn btn-primary">

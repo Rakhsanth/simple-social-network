@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import * as Yup from 'yup';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions';
 import { uploadProfilePicture } from '../../apiRequests/profileRequests';
-import { Redirect, withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 function ProfilePictureUpload(props) {
     console.log('rerendering');
 
-    const { profile, history } = props;
+    const { profile } = props;
 
     let pictureUploaded = false;
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { backendBaseURL } from '../config/config';
 
 export const uploadProfilePicture = async (profilePicture, id) => {
     let token;
@@ -16,7 +17,7 @@ export const uploadProfilePicture = async (profilePicture, id) => {
     };
     try {
         const response = await axios.put(
-            `http://localhost:4010/api/v1/profiles/picture/upload/${id}`,
+            `${backendBaseURL}/api/v1/profiles/picture/upload/${id}`,
             formData,
             axiosConfig
         );

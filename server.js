@@ -37,7 +37,15 @@ const app = express();
 //     credentials: true,
 // };
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // To make passing and receiving cookies
+app.use(
+    cors({
+        credentials: true,
+        origin: [
+            'http://localhost:3000',
+            'https://simple-social-network-288007.el.r.appspot.com',
+        ],
+    })
+); // To make passing and receiving cookies
 
 connectDB();
 
