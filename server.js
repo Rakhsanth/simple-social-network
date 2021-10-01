@@ -24,18 +24,15 @@ dotenv.config({
 
 const app = express();
 
-// cors related stuff
-// const whitelist = ['http://localhost:3000'];
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (whitelist.indexOf(origin) !== -1) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     credentials: true,
-// };
+connectDB();
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+app.use(cookieParser());
+
+app.use(express.json());
 
 app.use(
     cors({
@@ -46,16 +43,6 @@ app.use(
         ],
     })
 ); // To make passing and receiving cookies
-
-connectDB();
-
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
-
-app.use(cookieParser());
-
-app.use(express.json());
 
 app.use(fileUpload());
 
