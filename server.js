@@ -25,23 +25,16 @@ dotenv.config({
 const app = express();
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Origin',
+        'https://simple-social-network-backend.el.r.appspot.com'
+    );
     res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
     );
     next();
 });
-
-connectDB();
-
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
-
-app.use(cookieParser());
-
-app.use(express.json());
 
 app.use(
     cors({
@@ -52,6 +45,18 @@ app.use(
         ],
     })
 ); // To make passing and receiving cookies
+
+app.options('*', cors()); //put this before your route
+
+connectDB();
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+app.use(cookieParser());
+
+app.use(express.json());
 
 app.use(fileUpload());
 
